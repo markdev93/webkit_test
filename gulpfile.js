@@ -4,6 +4,7 @@ const imageminWebp = require('imagemin-webp');
 const uglify = require('gulp-uglify');
 const sass = require('gulp-sass');
 const concat = require('gulp-concat');
+const cleanCSS = require('gulp-clean-css');
 
 /*
 -- top level functions --
@@ -30,10 +31,11 @@ gulp.task('imageMinWebp', function(webp){
   webp();
 });
 
-//compile main.scss to main.css and add to dist folder
+//compile and minify main.scss to main.css and add to dist folder
 gulp.task('compileScss', function(styles){
   gulp.src('dev/styles/scss/main.scss')
   .pipe(sass().on('error', sass.logError))
+  .pipe(cleanCSS({compatibility: 'ie8'}))
   .pipe(gulp.dest('dist/styles'));
   styles();
 });
