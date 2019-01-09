@@ -21,6 +21,13 @@ gulp.task('copyHtml', function(html){
   html();
 });
 
+//optimize images jpg, png, svg & gif format
+gulp.task('imageOp', function(img){
+  gulp.src('dev/img/*')
+  .pipe(imagemin())
+  .pipe(gulp.dest('dist/images'))
+});
+
 //optimize images to webp format
 gulp.task('imageMinWebp', function(webp){
   imagemin(['dev/img/*'], 'dist/img',{
@@ -50,10 +57,11 @@ gulp.task('minifiedJs', function(scripts){
 });
 
 //default task. create an array of all gulp tasks so only one ask has to run.
-gulp.task('default', gulp.series(['copyHtml', 'imageMinWebp', 'compileScss', 'minifiedJs']));
+gulp.task('default', gulp.series(['copyHtml', 'imageOp', 'imageMinWebp', 'compileScss', 'minifiedJs']));
 
 gulp.task('watch', function(){
   gulp.watch('dev/scripts/*.js', gulp.series(['minifiedJs']));
+  gulp.watch('dev/img/*', gulp.series(['imageOp']));
   gulp.watch('dev/img/*', gulp.series(['imageMinWebp']));
   gulp.watch('dev/styles/scss/main.scss', gulp.series(['compileScss']));
   gulp.watch('dev/*html', gulp.series(['copyHtml']));
